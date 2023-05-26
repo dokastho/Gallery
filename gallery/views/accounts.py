@@ -11,6 +11,7 @@ import gallery
 def accounts():
     """/accounts/?target=URL Immediate redirect. No screenshot."""
     with gallery.app.app_context():
+
         # check if target is unspecified or blank
         target = gallery.model.get_target()
 
@@ -40,12 +41,12 @@ def accounts():
                 "email": request.form.get("email"),
                 "password": request.form.get("password")
             }
-            if not do_create(connection, info):
+            if not do_create(info):
                 abort(500)      # server didn't abort correctly
 
 
         elif operation == "delete":
-            do_delete(connection)
+            do_delete()
 
         elif operation == "update_password":
             # user must be logged in
@@ -58,7 +59,7 @@ def accounts():
                 "new": request.form.get("newpw"),
                 "verify_new": request.form.get("renewpw"),
             }
-            do_update_password(connection, info)
+            do_update_password(info)
 
         else:
             abort(400)  # invalid request
@@ -68,14 +69,14 @@ def accounts():
 
 def do_login(uname, pword):
     """Login user with username and password."""
-    logname = gallery.check_authorization(uname, pword)
+    logname = gallery.model.check_authorization(uname, pword)
     if not logname:
         abort(403)
 
     return True
 
 
-def do_create(connection, info):
+def do_create(info):
     """Create account with info."""
     for i in info:
         if i == "":
@@ -86,32 +87,37 @@ def do_create(connection, info):
     timestamp = local.format()
 
     pw_str = create_hashed_password(info['password'])
+    
+    req_data = {
+        "table": gallery.app.config["DATABASE_FILENAME"],
+        "query": "SELECT username FROM users WHERE username = ?",
+        "args": [info['username']],
+    }
+    req_hdrs = {
+        'content_type': 'application/json'
+    }
+        
+    user = gallery.get_client().get(req_data, req_hdrs)
 
-    cur = connection.execute(
-        "SELECT username "
-        "FROM users "
-        "WHERE username == ? ",
-        (info['username'],)
-    )
-    user = cur.fetchall()
     if len(user) != 0:
         abort(409)
-
-
-    cur = connection.execute(
-        "INSERT INTO users "
-        "(username, email, password, created) "
-        "VALUES (?, ?, ?, ?)",
-        (
-            info['username'], info['email'], pw_str, timestamp,
-        )
-    )
-    cur.fetchall()
+        
+    
+    req_data = {
+        "table": gallery.app.config["DATABASE_FILENAME"],
+        "query": "INSERT INTO users (username, email, password, created) VALUES (?, ?, ?, ?)",
+        "args": [info['username'], info['email'], pw_str, timestamp],
+    }
+    req_hdrs = {
+        'content_type': 'application/json'
+    }
+        
+    gallery.get_client().post(req_data, req_hdrs)
 
     return True
 
 
-def do_delete(connection):
+def do_delete():
     """Delete account of logname."""
     # user must be logged in
     if 'logname' not in session:
@@ -120,30 +126,37 @@ def do_delete(connection):
     uname = session['logname']
 
     # delete users entry and all related ones
-    cur = connection.execute(
-        "DELETE FROM users "
-        "WHERE username == ?",
-        (uname,)
-    )
-    cur.fetchall()
+    req_data = {
+        "table": gallery.app.config["DATABASE_FILENAME"],
+        "query": "DELETE FROM users WHERE username = ?",
+        "args": [uname],
+    }
+    req_hdrs = {
+        'content_type': 'application/json'
+    }
+        
+    gallery.get_client().post(req_data, req_hdrs)
 
     # clear the session
     session.clear()
 
 
-def do_update_password(connection, info):
+def do_update_password(info):
     """Update password with info."""
     if (info['old'] is None or info['new'] is None or
             info['verify_new'] is None):
         abort(400)
-
-    cur = connection.execute(
-        "SELECT password "
-        "FROM users "
-        "WHERE username == ? ",
-        (info['username'],)
-    )
-    old_pw_hash = cur.fetchall()
+        
+    req_data = {
+        "table": gallery.app.config["DATABASE_FILENAME"],
+        "query": "SELECT password FROM users WHERE username = ?",
+        "args": [info['username']],
+    }
+    req_hdrs = {
+        'content_type': 'application/json'
+    }
+        
+    old_pw_hash = gallery.get_client().get(req_data, req_hdrs)
     old_pw_hash = old_pw_hash[0]
 
     # check if salt is present (default data isn't encrypted)
@@ -153,15 +166,18 @@ def do_update_password(connection, info):
         pw_str = gallery.model.encrypt(salt, info['old'])
     else:
         pw_str = info['old']
-
-    cur = connection.execute(
-        "SELECT username "
-        "FROM users "
-        "WHERE username == ? "
-        "AND password == ?",
-        (info['username'], pw_str,)
-    )
-    user = cur.fetchall()
+        pass
+    
+    req_data = {
+        "table": gallery.app.config["DATABASE_FILENAME"],
+        "query": "SELECT username FROM users WHERE username = ? AND password == ?",
+        "args": [info['username'], pw_str],
+    }
+    req_hdrs = {
+        'content_type': 'application/json'
+    }
+        
+    user = gallery.get_client().get(req_data, req_hdrs)
     if len(user) == 0:
         abort(403)
 
@@ -169,13 +185,16 @@ def do_update_password(connection, info):
         abort(401)
 
     new_pw_hash = create_hashed_password(info['new'])
-    cur = connection.execute(
-        "UPDATE users "
-        "SET password = ? "
-        "WHERE username == ? ",
-        (new_pw_hash, info['username'],)
-    )
-    user = cur.fetchall()
+    req_data = {
+        "table": gallery.app.config["DATABASE_FILENAME"],
+        "query": "UPDATE users SET password = ? WHERE username == ?",
+        "args": [new_pw_hash, info['username']],
+    }
+    req_hdrs = {
+        'content_type': 'application/json'
+    }
+        
+    gallery.get_client().post(req_data, req_hdrs)
 
 
 @gallery.app.route('/accounts/login/')

@@ -1,7 +1,6 @@
 """Package initializer."""
 import flask
 from flask_cors import CORS
-from d3b_client.client import *
 # app is a single object used by all the code modules in this package
 app = flask.Flask(__name__)  # pylint: disable=invalid-name
 CORS(app)

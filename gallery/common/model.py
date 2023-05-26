@@ -41,15 +41,16 @@ def check_session():
     if 'logname' not in flask.session:
         return False
     username = flask.session['logname']
-    cur = connection.execute(
-        "SELECT username "
-        "FROM users "
-        "WHERE username == ?",
-        (username, )
-    )
+    req_data = {
+        "table": gallery.app.config["DATABASE_FILENAME"],
+        "query": "SELECT username FROM users WHERE username = ?",
+        "args": [username],
+    }
+    req_hdrs = {
+        'content_type': 'application/json'
+    }
+    user = gallery.get_client().get(req_data, req_hdrs)
 
-    # user must exist
-    user = cur.fetchall()
     if len(user) == 0:
         flask.session.clear()
         return False
@@ -71,15 +72,15 @@ def check_authorization(username=None, password=None):
             return False
 
     # verify username and password match an existing user
-    cur = connection.execute(
-        "SELECT password "
-        "FROM users "
-        "WHERE username == ? ",
-        (username,)
-    )
-
-    # password must exist
-    pw_hash = cur.fetchall()
+    req_data = {
+        "table": gallery.app.config["DATABASE_FILENAME"],
+        "query": "SELECT password FROM users WHERE username = ?",
+        "args": [username],
+    }
+    req_hdrs = {
+        'content_type': 'application/json'
+    }
+    pw_hash = gallery.get_client().get(req_data, req_hdrs)
     if len(pw_hash) == 0:
         return False
 
@@ -93,15 +94,17 @@ def check_authorization(username=None, password=None):
         pw_str = password
 
     # find an entry with encrypted password
-    cur = connection.execute(
-        "SELECT username "
-        "FROM users "
-        "WHERE username == ? AND password == ?",
-        (username, pw_str,)
-    )
+    req_data = {
+        "table": gallery.app.config["DATABASE_FILENAME"],
+        "query": "SELECT username FROM users WHERE username = ? AND password = ?",
+        "args": [username, pw_str],
+    }
+    req_hdrs = {
+        'content_type': 'application/json'
+    }
 
     # user must exist
-    user = cur.fetchall()
+    user = gallery.get_client().get(req_data, req_hdrs)
     if len(user) == 0:
         return False
 

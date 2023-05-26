@@ -9,4 +9,5 @@ SESSION_COOKIE_NAME = 'login'
 # File Upload to var/uploads/
 SITE_ROOT = pathlib.Path(__file__).resolve().parent.parent
 # Database file is var/resume.sqlite3
-DATABASE_FILENAME = SITE_ROOT/'var'/'gallery.sqlite3'
+DATABASE_FILENAME = 'gallery.sqlite3'
+NDBS = 3
