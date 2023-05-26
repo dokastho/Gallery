@@ -12,16 +12,21 @@ def get_picture_info():
     req_hdrs = {
         'content_type': 'application/json'
     }
-    data = gallery.get_client().get(req_data, req_hdrs)
+    data = {
+        "logname": "dokastho",
+        "pictures": gallery.get_client().get(req_data, req_hdrs)
+    }
     return flask.jsonify(data)
 
 
-@gallery.app.route("/api/v1/pictures/<pic_id>/", methods=["POST"])
+@gallery.app.route("/api/v1/foo/<pic_id>/")
 def get_picture(pic_id):
     req_data = {
         "table": gallery.app.config["DATABASE_FILENAME"],
         "query": "SELECT fileid, name FROM pictures WHERE fileid = ?",
         "args": [pic_id],
+        "media_op": "get",
+        "file_id": pic_id
     }
     req_hdrs = {
         'content_type': 'application/json'

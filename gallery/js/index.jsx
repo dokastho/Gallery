@@ -11,6 +11,7 @@ class Index extends React.Component {
   }
 
   componentDidMount() {
+    // fetch image metadata
     fetch('/api/v1/pictures/', { credentials: 'same-origin', method: 'POST' })
     .then((response) => {
       if (!response.ok) throw Error(response.statusText);
@@ -32,8 +33,9 @@ class Index extends React.Component {
       <div>
         <h1>{logname}</h1>
         {
-          pictures.forEach((picture) => {
-            <><img src={picture.fileid} alt={picture.name} /><h2>{picture.name}</h2></>
+          pictures.map((picture) => {
+            console.log(picture);
+            return(<div><img src={`/api/v1/foo/${picture.fileid}/`} alt={picture.name} /><h2>{picture.name}</h2></div>)
           })
         }
       </div>
