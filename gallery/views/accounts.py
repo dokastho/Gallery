@@ -4,17 +4,15 @@ import hashlib
 import os
 import arrow
 from flask import abort, redirect, render_template, request, session
-import app_rename_me
+import gallery
 
 
-@app_rename_me.app.route('/accounts/', methods=['POST'])
+@gallery.app.route('/accounts/', methods=['POST'])
 def accounts():
     """/accounts/?target=URL Immediate redirect. No screenshot."""
-    with app_rename_me.app.app_context():
-        connection = app_rename_me.model.get_db()
-
+    with gallery.app.app_context():
         # check if target is unspecified or blank
-        target = app_rename_me.model.get_target()
+        target = gallery.model.get_target()
 
         # get operation
         operation = request.form.get('operation')
@@ -70,7 +68,7 @@ def accounts():
 
 def do_login(uname, pword):
     """Login user with username and password."""
-    logname = app_rename_me.model.check_authorization(uname, pword)
+    logname = gallery.check_authorization(uname, pword)
     if not logname:
         abort(403)
 
@@ -152,7 +150,7 @@ def do_update_password(connection, info):
     salt = old_pw_hash['password'].split("$")
     if len(salt) > 1:
         salt = salt[1]
-        pw_str = app_rename_me.model.encrypt(salt, info['old'])
+        pw_str = gallery.model.encrypt(salt, info['old'])
     else:
         pw_str = info['old']
 
@@ -180,10 +178,10 @@ def do_update_password(connection, info):
     user = cur.fetchall()
 
 
-@app_rename_me.app.route('/accounts/login/')
+@gallery.app.route('/accounts/login/')
 def login():
     """Render login page."""
-    with app_rename_me.app.app_context():
+    with gallery.app.app_context():
 
         # redirect if a session cookie exists
         if 'logname' not in session:
@@ -194,21 +192,21 @@ def login():
         return redirect('/')
 
 
-@app_rename_me.app.route('/accounts/logout/', methods=['POST'])
+@gallery.app.route('/accounts/logout/', methods=['POST'])
 def logout():
     """Log out user and redirects to login."""
     session.clear()
     return redirect('/')
 
 
-@app_rename_me.app.route('/accounts/create/', methods=['GET'])
+@gallery.app.route('/accounts/create/', methods=['GET'])
 def create():
     """Render create page if not logged in."""
 
     return render_template('create.html')
 
 
-@app_rename_me.app.route('/accounts/delete/')
+@gallery.app.route('/accounts/delete/')
 def delete():
     """Render delete page if logged in."""
     if 'logname' not in session:
@@ -220,7 +218,7 @@ def delete():
     return render_template('delete.html', **context)
 
 
-@app_rename_me.app.route('/accounts/password/')
+@gallery.app.route('/accounts/password/')
 def password():
     """Render page to update password if logged in."""
     if 'logname' not in session:

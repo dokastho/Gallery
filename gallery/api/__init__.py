@@ -1,1 +1,1 @@
-# from app_rename_me.api. import *
+# from gallery.api. import *

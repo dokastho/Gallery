@@ -1,16 +1,16 @@
-import app_rename_me
+import gallery
 import flask
-from app_rename_me.common.model import check_session
+from gallery.common.model import check_session
 
 
-@app_rename_me.app.route("/")
+@gallery.app.route("/")
 def show_index():
-    """Render app_rename_me for the site."""
+    """Render gallery for the site."""
 
     return flask.render_template("index.html")
 
 
-@app_rename_me.app.route("/user/<uname>/")
+@gallery.app.route("/user/<uname>/")
 def show_user(uname):
     """Show profile options for uname."""
     logname = check_session()

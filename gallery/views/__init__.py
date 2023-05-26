@@ -1,1 +1,2 @@
-from app_rename_me.views.index import *
+from gallery.views.index import *
+from gallery.views.accounts import *

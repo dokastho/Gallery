@@ -16,16 +16,16 @@ case $1 in
   "create")
   ## TODO avoid clobbering an existing database?
     mkdir -p var/uploads
-    sqlite3 var/app_rename_me.sqlite3 < sql/schema.sqlw
+    sqlite3 var/gallery.sqlite3 < sql/schema.sql
     ;;
 
   "destroy")
-    rm -rf var/app_rename_me.sqlite3 var/uploads
+    rm -rf var/gallery.sqlite3 var/uploads
     ;;
   "reset")
-    rm -rf var/app_rename_me.sqlite3 var/uploads
+    rm -rf var/gallery.sqlite3 var/uploads
     mkdir -p var/uploads
-    sqlite3 var/app_rename_me.sqlite3 < sql/schema.sql
+    sqlite3 var/gallery.sqlite3 < sql/schema.sql
     ;;
   "users")
     ;;

@@ -1,5 +1,5 @@
 """
-Personal website app_rename_me python package configuration.
+Gallery python package configuration.
 """
 
 from setuptools import setup
@@ -8,13 +8,13 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name='app_rename_me',
+    name='gallery',
     version='0.1.0',
-    packages=['app_rename_me'],
+    packages=['gallery'],
     author="Thomas Dokas",
     author_email="dokastho@umich.edu",
-    url="https://github.com/dokastho/app_rename_me",
-    description="A fresh take on what a app_rename_me can do",
+    url="https://github.com/dokastho/gallery",
+    description="A fresh take on what a gallery can be",
     long_description=long_description,
     long_description_content_type="text/markdown",
     include_package_data=True,
