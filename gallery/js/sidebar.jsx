@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SmallIcon from './smallIcon';
+import { SmallIcon, SmallTextIcon } from './smallIcon';
 
 class Sidebar extends React.Component {
   constructor(props) {
@@ -8,7 +8,7 @@ class Sidebar extends React.Component {
   }
 
   render() {
-    const { albums, toggleSidebar } = this.props;
+    const { albums, toggleSidebar, selectAlbum } = this.props;
     return (
       <div className='sidebar-tray'>
         <div className='sidebar-content'>
@@ -16,7 +16,7 @@ class Sidebar extends React.Component {
           <h1>Albums</h1>
           {
             albums.map((album) => {
-              return (<h2>{album.name}</h2>)
+              return (<SmallTextIcon text={album.name} className={'sidebar-album'} onClick={selectAlbum} />)
             })
           }
         </div>
@@ -28,6 +28,7 @@ class Sidebar extends React.Component {
 Sidebar.propTypes = {
   albums: PropTypes.instanceOf(Array),
   // toggleSidebar: collapse sidebar
+  // selectAlbum: select album for focusing
 };
 
 export default Sidebar

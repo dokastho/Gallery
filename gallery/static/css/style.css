@@ -101,7 +101,6 @@ body {
     width: 48px;
     height: 48px;
     padding: 0.25rem;
-    color: blue;
 }
 
 #small-icon:hover {
@@ -111,6 +110,20 @@ body {
 }
 
 #small-icon:active {
+    background-color: gray;
+}
+
+#small-text {
+    padding: 0.25rem;
+}
+
+#small-text:hover {
+    background-color: darkgray;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+#small-text:active {
     background-color: gray;
 }
 

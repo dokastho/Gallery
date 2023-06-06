@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react'
-import SmallIcon from './smallIcon';
+import {SmallIcon} from './smallIcon';
 
 class BigPictureControls extends React.Component {
 

@@ -9,14 +9,34 @@ class SmallIcon extends React.Component {
   render() {
     const { src, className, onClick } = this.props;
     return (
-        <img src={src} className={className} id='small-icon' onClick={() => {onClick()}} />
+      <img src={src} className={className} id='small-icon' onClick={() => { onClick() }} />
     )
   }
 }
 
 SmallIcon.propTypes = {
-    src: PropTypes.string.isRequired,
-    className: PropTypes.string.isRequired,
+  src: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired,
+  // onClick: action method on click
 };
 
-export default SmallIcon
+class SmallTextIcon extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const { text, className, onClick } = this.props;
+    return (
+      <h2 className={className} id='small-text' onClick={() => { onClick(text) }}>{text}</h2>
+    )
+  }
+}
+
+SmallTextIcon.propTypes = {
+  text: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired,
+  // onClick: action method on click
+};
+
+export { SmallIcon, SmallTextIcon }

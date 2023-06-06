@@ -11,7 +11,7 @@ class Topbar extends React.Component {
     return (
       <div className='topbar-tray'>
         <div className='topbar-content'>
-          <h1>Photos</h1>
+          <h1><a href='/'>Photos</a></h1>
           <h2>{logname}</h2>
         </div>
       </div>

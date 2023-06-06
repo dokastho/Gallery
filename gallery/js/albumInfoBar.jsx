@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SmallIcon from './smallIcon';
+import {SmallIcon} from './smallIcon';
 
 class AlbumInfoBar extends React.Component {
   constructor(props) {

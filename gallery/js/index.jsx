@@ -13,8 +13,10 @@ class Index extends React.Component {
       pictures: [],
       albums: [],
       sidebarShow: true,
+      selectedAlbum: "All Photos"
     }
     this.toggleSidebar = this.toggleSidebar.bind(this);
+    this.selectAlbum = this.selectAlbum.bind(this);
   }
 
   componentDidMount() {
@@ -36,23 +38,33 @@ class Index extends React.Component {
       .catch((error) => console.log(error));
   }
 
+  selectAlbum(album) {
+    this.setState({ selectedAlbum: album});
+  }
+
   toggleSidebar() {
     const { sidebarShow } = this.state;
-    this.setState({sidebarShow: !sidebarShow });
+    this.setState({ sidebarShow: !sidebarShow });
   }
 
   render() {
-    const { sidebarShow, logname, pictures, albums } = this.state;
+    const {
+      sidebarShow,
+      logname,
+      pictures,
+      albums,
+      selectedAlbum
+    } = this.state;
     return (
       <div className='body-tray'>
         <Topbar logname={logname} />
         <div className='body-content'>
           {
-            sidebarShow ? <Sidebar albums={albums} toggleSidebar={this.toggleSidebar} /> : null
+            sidebarShow ? <Sidebar albums={albums} toggleSidebar={this.toggleSidebar} selectAlbum={this.selectAlbum} /> : null
           }
-          <Gallery albumName={"All Photos"} pictures={pictures} sidebarShow={sidebarShow} toggleSidebar={this.toggleSidebar} />
+          <Gallery albumName={selectedAlbum} pictures={pictures} sidebarShow={sidebarShow} toggleSidebar={this.toggleSidebar} selectedAlbum={selectedAlbum} />
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     )
   }

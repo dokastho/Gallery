@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Picture from './picture';
 import BigPicture from './bigPicture';
 import AlbumInfoBar from './albumInfoBar';
-import SmallIcon from './smallIcon';
 import BigPictureControls from './bigPictureControls';
 
 class Gallery extends React.Component {
@@ -33,8 +32,17 @@ class Gallery extends React.Component {
   }
 
   render() {
-    const { albumName, pictures, sidebarShow, toggleSidebar } = this.props;
+    const {
+      albumName,
+      pictures,
+      sidebarShow,
+      toggleSidebar,
+      selectedAlbum
+    } = this.props;
     const { blownUpThumbnail } = this.state;
+
+    const filteredPictures = pictures.filter(picture => (selectedAlbum === picture.album) || (selectedAlbum === 'All Photos'));
+
     console.log("gallery state");
     console.log(this.state);
     return (
@@ -44,16 +52,16 @@ class Gallery extends React.Component {
         {
           blownUpThumbnail !== -1 ? (
             <div>
-              <BigPictureControls blownUpThumbnail={blownUpThumbnail} nPictures={pictures.length} closeImage={this.closeImage.bind(this)} leftButton={this.picturePaginationLeft.bind(this)} rightButton={this.picturePaginationRight.bind(this)} />
-              <BigPicture id={pictures[blownUpThumbnail].fileid} name={pictures[blownUpThumbnail].name} index={blownUpThumbnail} />
+              <BigPictureControls blownUpThumbnail={blownUpThumbnail} nPictures={filteredPictures.length} closeImage={this.closeImage.bind(this)} leftButton={this.picturePaginationLeft.bind(this)} rightButton={this.picturePaginationRight.bind(this)} />
+              <BigPicture id={filteredPictures[blownUpThumbnail].fileid} name={filteredPictures[blownUpThumbnail].name} index={blownUpThumbnail} />
             </div>
           )
             :
             (
               <div className='gallery-grid'>
                 {
-                  pictures.map((picture, index) => {
-                    return (<Picture id={picture.fileid} name={picture.name} index={index} thumbnailBlowUp={this.thumbnailBlowUp.bind(this)} />)
+                  filteredPictures.map((picture, index) => {
+                    return <Picture id={picture.fileid} name={picture.name} index={index} thumbnailBlowUp={this.thumbnailBlowUp.bind(this)} />
                   })
                 }
               </div>
@@ -66,6 +74,7 @@ class Gallery extends React.Component {
 
 Gallery.propTypes = {
   albumName: PropTypes.string.isRequired,
+  selectedAlbum: PropTypes.string.isRequired,
   pictures: PropTypes.instanceOf(Array),
   sidebarShow: PropTypes.bool.isRequired,
   // toggleSidebar
