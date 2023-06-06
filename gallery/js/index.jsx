@@ -1,43 +1,58 @@
 import React from 'react';
+import Sidebar from './sidebar';
+import Gallery from './gallery';
+import Footer from './footer';
+import Topbar from './topbar';
 import { render } from 'react-dom';
 
 class Index extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      logname: "",
-      pictures: []
+      logname: "log in",
+      pictures: [],
+      albums: [],
+      sidebarShow: true,
     }
+    this.toggleSidebar = this.toggleSidebar.bind(this);
   }
 
   componentDidMount() {
     // fetch image metadata
     fetch('/api/v1/pictures/', { credentials: 'same-origin', method: 'POST' })
-    .then((response) => {
-      if (!response.ok) throw Error(response.statusText);
-      return response.json();
-    })
-    .then((data) => {
-      console.log(data);
-      this.setState({
-        logname: data.logname,
-        pictures: data.pictures
-      });
-    })
-    .catch((error) => console.log(error));
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .then((data) => {
+        console.log("state from api");
+        console.log(data);
+        this.setState({
+          logname: data.logname,
+          pictures: data.pictures,
+          albums: data.albums,
+        });
+      })
+      .catch((error) => console.log(error));
+  }
+
+  toggleSidebar() {
+    const { sidebarShow } = this.state;
+    this.setState({sidebarShow: !sidebarShow });
   }
 
   render() {
-    const { logname, pictures } = this.state;
+    const { sidebarShow, logname, pictures, albums } = this.state;
     return (
-      <div>
-        <h1>{logname}</h1>
-        {
-          pictures.map((picture) => {
-            console.log(picture);
-            return(<div><img src={`/api/v1/foo/${picture.fileid}/`} alt={picture.name} /><h2>{picture.name}</h2></div>)
-          })
-        }
+      <div className='body-tray'>
+        <Topbar logname={logname} />
+        <div className='body-content'>
+          {
+            sidebarShow ? <Sidebar albums={albums} toggleSidebar={this.toggleSidebar} /> : null
+          }
+          <Gallery albumName={"All Photos"} pictures={pictures} sidebarShow={sidebarShow} toggleSidebar={this.toggleSidebar} />
+        </div>
+        <Footer />
       </div>
     )
   }

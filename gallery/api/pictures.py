@@ -14,8 +14,13 @@ def get_picture_info():
     }
     data = {
         "logname": "dokastho",
-        "pictures": gallery.get_client().get(req_data, req_hdrs)
     }
+
+    # return logname, pictures & albums
+    data["pictures"] = gallery.get_client().get(req_data, req_hdrs)
+    # get albums too
+    req_data["query"] = "SELECT * FROM albums"
+    data["albums"] = gallery.get_client().get(req_data, req_hdrs)
     return flask.jsonify(data)
 
 
@@ -23,8 +28,8 @@ def get_picture_info():
 def get_picture(pic_id):
     req_data = {
         "table": gallery.app.config["DATABASE_FILENAME"],
-        "query": "SELECT fileid, name FROM pictures WHERE fileid = ?",
-        "args": [pic_id],
+        "query": "",
+        "args": [],
         "media_op": "get",
         "file_id": pic_id
     }
