@@ -18,6 +18,7 @@ class BigPictureControls extends React.Component {
     } = this.props;
     return (
       <div className='control-buttons'>
+        <SmallIcon src='/static/img/close-tab.png' className='control-button' onClick={closeImage} />
         {
           blownUpThumbnail !== 0 ? (
             <SmallIcon src='/static/img/left-arrow.png' className='control-button' onClick={leftButton} />
@@ -28,7 +29,6 @@ class BigPictureControls extends React.Component {
             <SmallIcon src='/static/img/right-arrow.png' className='control-button' onClick={rightButton} />
           ) : null
         }
-        <SmallIcon src='/static/img/close-tab.png' className='control-button' onClick={closeImage} />
       </div>
     )
   }
