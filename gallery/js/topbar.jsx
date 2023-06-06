@@ -12,7 +12,7 @@ class Topbar extends React.Component {
       <div className='topbar-tray'>
         <div className='topbar-content'>
           <h1><a href='/'>Photos</a></h1>
-          <h2>{logname}</h2>
+          <h2><a href={`/user/${logname}`}>{logname}</a></h2>
         </div>
       </div>
     )
@@ -20,7 +20,7 @@ class Topbar extends React.Component {
 }
 
 Topbar.propTypes = {
-    logname: PropTypes.string.isRequired
+  logname: PropTypes.string.isRequired
 };
 
 export default Topbar
