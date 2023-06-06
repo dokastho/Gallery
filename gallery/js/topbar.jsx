@@ -12,7 +12,9 @@ class Topbar extends React.Component {
       <div className='topbar-tray'>
         <div className='topbar-content'>
           <h1><a href='/'>Photos</a></h1>
-          <h2><a href={`/user/${logname}`}>{logname}</a></h2>
+          {
+            logname === 'log in' ? <h2><a href={'/accounts/login/'}>{logname}</a></h2> : <h2><a href={`/user/${logname}`}>{logname}</a></h2>
+          }
         </div>
       </div>
     )
