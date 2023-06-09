@@ -10,7 +10,7 @@ class Picture extends React.Component {
     const { id, name, index, thumbnailBlowUp } = this.props;
     return (
       <div>
-        <img src={`/api/v1/foo/${id}/`} alt={name} className='image' onClick={() => {thumbnailBlowUp(index)}} />
+        <img src={`/api/v1/picture/${id}/`} alt={name} className='image' onClick={() => {thumbnailBlowUp(index)}} />
       </div>
     )
   }

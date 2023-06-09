@@ -31,7 +31,7 @@ def get_picture_info():
     return flask.jsonify(data)
 
 
-@gallery.app.route("/api/v1/foo/<pic_id>/")
+@gallery.app.route("/api/v1/picture/<pic_id>/")
 def get_picture(pic_id):
     req_data = {
         "table": gallery.app.config["DATABASE_FILENAME"],
@@ -45,3 +45,8 @@ def get_picture(pic_id):
     }
     data = gallery.get_client().file_get(req_data, req_hdrs)
     return flask.Response(data)
+
+
+@gallery.app.route("/api/v1/picture/upload/")
+def upload_picture():
+    pass

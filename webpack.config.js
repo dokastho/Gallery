@@ -9,6 +9,7 @@ module.exports = {
     index: './gallery/js/index.jsx',
     login: './gallery/js/login.jsx',
     password: './gallery/js/password.jsx',
+    upload: './gallery/js/upload.jsx',
   },
   output: {
     path: path.join(__dirname, '/gallery/static/js/'),

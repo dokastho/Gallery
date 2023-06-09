@@ -11,7 +11,7 @@ class BigPicture extends React.Component {
     const { id, name } = this.props;
     return (
       <div>
-        <img src={`/api/v1/foo/${id}/`} alt={name} className='big-image' />
+        <img src={`/api/v1/picture/${id}/`} alt={name} className='big-image' />
       </div>
     )
   }
