@@ -8,7 +8,12 @@ class Sidebar extends React.Component {
   }
 
   render() {
-    const { albums, toggleSidebar, selectAlbum } = this.props;
+    const {
+      albums,
+      toggleSidebar,
+      selectAlbum,
+      logname
+    } = this.props;
     return (
       <div className='sidebar-tray'>
         <div className='sidebar-content'>
@@ -20,6 +25,11 @@ class Sidebar extends React.Component {
             })
           }
         </div>
+        <div className='upload-link'>
+          {
+            logname === 'dokastho' ? <h2><a href='/upload/'>Upload</a></h2> : null
+          }
+        </div>
       </div>
     )
   }
@@ -27,6 +37,7 @@ class Sidebar extends React.Component {
 
 Sidebar.propTypes = {
   albums: PropTypes.instanceOf(Array),
+  logname: PropTypes.string.isRequired,
   // toggleSidebar: collapse sidebar
   // selectAlbum: select album for focusing
 };

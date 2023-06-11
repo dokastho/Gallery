@@ -60,7 +60,7 @@ class Index extends React.Component {
         <Topbar logname={logname} />
         <div className='body-content'>
           {
-            sidebarShow ? <Sidebar albums={albums} toggleSidebar={this.toggleSidebar} selectAlbum={this.selectAlbum} /> : null
+            sidebarShow ? <Sidebar albums={albums} logname={logname} toggleSidebar={this.toggleSidebar} selectAlbum={this.selectAlbum} /> : null
           }
           <Gallery albumName={selectedAlbum} pictures={pictures} sidebarShow={sidebarShow} toggleSidebar={this.toggleSidebar} selectedAlbum={selectedAlbum} />
         </div>

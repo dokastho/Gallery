@@ -1,5 +1,6 @@
 """Development configuration."""
 import pathlib
+MY_HOST_ID = 1
 # Root of this application, useful if it doesn't occupy an entire domain
 APPLICATION_ROOT = '/'
 # Secret key for encrypting cookies

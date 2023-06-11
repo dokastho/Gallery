@@ -58,18 +58,17 @@ class UploadPage extends React.Component {
         <Topbar logname={logname} /><div className='account-background'>
           <div className='account-view'>
             <h1>Upload Pictures</h1>
-            <form action="/accounts/?target=/" method="post">
-              <input type="hidden" name="operation" value="create" />
+            <form action="/api/v1/pictures/upload/" method="post">
               <h2>Attach Pictures</h2>
               <br />
-              <input type="file" id="file" name="file" required />
+              <input type="file" id="file" name="file" required multiple />
               <br />
               <br />
               <label htmlFor="albums">select an album to upload to:</label><br />
               {
                 albums.map((album) => {
                   return (
-                    <><input type='radio' id={`label-${album.name}`} name='album-choice' value={album.name} required /><label htmlFor={`label-${album.name}`}>{album.name}</label><br /></>
+                    <><input type='radio' id={`label-${album.name}`} name='album-choice' value={album.id} required /><label htmlFor={`label-${album.name}`}>{album.name}</label><br /></>
                   )
                 })
               }
@@ -77,7 +76,7 @@ class UploadPage extends React.Component {
               {
                 isNewAlbum ?
                   (
-                    <><input type='radio' id='label-new-album' name='album-choice' value='new-album' /><input type='text' value={newAlbumName} onChange={(e) => { this.albumNameUpdate(e.target.value); }} required /><input type='button' value='cancel' onClick={() => { this.cancelNewAlbum(); }} /></>
+                    <><input type='radio' aria-selected id='label-new-album' name='album-choice' value={0} /><input type='text' name='new-album-name' value={newAlbumName} onChange={(e) => { this.albumNameUpdate(e.target.value); }} required /><input type='button' value='cancel' onClick={() => { this.cancelNewAlbum(); }} /></>
                   ) : (
                     <><label htmlFor='label-new-album'>or </label><button onClick={() => { this.createNewAlbum(); } }>create a new album</button></>
                   )
