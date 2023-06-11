@@ -1,5 +1,7 @@
 import gallery
 import flask
+import os
+import pathlib
 
 
 @gallery.app.route("/api/v1/pictures/", methods=["POST"])
@@ -49,7 +51,7 @@ def upload_picture():
         flask.abort(400)
         pass
 
-    for k in ['file', 'album-choice']:
+    for k in ['album-choice']:
         if k not in flask.request.form:
             flask.abort(400)
             pass
@@ -60,7 +62,7 @@ def upload_picture():
         flask.abort(403)
         pass
 
-    files = flask.request.form.getlist('file')
+    files = flask.request.files.getlist('file')
     album_id_str = flask.request.form.get('album-choice')
     album_id = int(album_id_str)
 
@@ -105,19 +107,32 @@ def upload_picture():
 
         gallery.get_client().post(req_data, req_hdrs)
         pass
+    
+    # create temp output folder if it doesn't already exists
+    os.chdir(gallery.app.config["SITE_ROOT"])
+    tmp_path = pathlib.Path(gallery.app.config["SITE_ROOT"]) / 'tmp'
+    if 'tmp' not in os.listdir():
+        os.mkdir(tmp_path)
+        pass
 
     # insert all pictures
     for picture in files:
+        file_id = gallery.get_uuid(picture.filename)
         req_data = {
-            "table": "schemas",
-            "query": "INSERT INTO pictures(owner, album, fileid) VALUES (?, ?, ?)",
-            "args": [logname, album, picture.filename],
+            "table": gallery.app.config["DATABASE_FILENAME"],
+            "query": "INSERT INTO pictures(owner, albumid, fileid) VALUES (?, ?, ?)",
+            "args": [logname, album_id, file_id],
             "media_op": "upload",
-            "file_id": picture.filename
+            "file_id": file_id
         }
+        
+        picture.save(tmp_path / file_id)
 
-        gallery.get_client().file_post(req_data, picture)
-    pass
+        fileobj = open(tmp_path / file_id, "rb")
+        gallery.get_client().file_post(req_data, fileobj)
+        os.remove(tmp_path / file_id)
+        pass
+    return flask.redirect("/")
 
 
 @gallery.app.route("/api/v1/picture/<pic_id>/")

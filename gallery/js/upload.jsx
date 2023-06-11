@@ -58,7 +58,7 @@ class UploadPage extends React.Component {
         <Topbar logname={logname} /><div className='account-background'>
           <div className='account-view'>
             <h1>Upload Pictures</h1>
-            <form action="/api/v1/pictures/upload/" method="post">
+            <form action="/api/v1/pictures/upload/" encType='multipart/form-data' method="post">
               <h2>Attach Pictures</h2>
               <br />
               <input type="file" id="file" name="file" required multiple />
