@@ -39,11 +39,20 @@ class Gallery extends React.Component {
     this.setState({blownUpThumbnail: -1});
   }
 
+  deleteAlbumAndUpdateState(args) {
+    const { id } = args;
+    const { deleteAlbum } = this.props;
+    deleteAlbum(id);
+    this.setState({blownUpThumbnail: -1});
+  }
+
   render() {
     const {
+      logname,
       sidebarShow,
       toggleSidebar,
       selectedAlbumName,
+      selectedAlbumId,
       pictures
     } = this.props;
     const { blownUpThumbnail } = this.state;
@@ -52,7 +61,7 @@ class Gallery extends React.Component {
     console.log(this.state);
     return (
       <div className='image-gallery'>
-        <AlbumInfoBar albumName={selectedAlbumName} sidebarShow={sidebarShow} toggleSidebar={toggleSidebar} />
+        <AlbumInfoBar logname={logname} albumName={selectedAlbumName} albumid={selectedAlbumId} sidebarShow={sidebarShow} toggleSidebar={toggleSidebar} deleteAlbum={this.deleteAlbumAndUpdateState.bind(this)} />
         <hr />
         {
           blownUpThumbnail !== -1 ? (
@@ -78,11 +87,14 @@ class Gallery extends React.Component {
 }
 
 Gallery.propTypes = {
+  logname: PropTypes.string.isRequired,
   selectedAlbumName: PropTypes.string.isRequired,
+  selectedAlbumId: PropTypes.number.isRequired,
   pictures: PropTypes.instanceOf(Array),
   sidebarShow: PropTypes.bool.isRequired,
   // toggleSidebar
   // deletePicture
+  // deleteAlbum
 };
 
 export default Gallery
