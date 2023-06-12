@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react'
-import {SmallIcon} from './smallIcon';
+import { SmallIcon, SmallTextIcon } from './smallIcon';
 
 class BigPictureControls extends React.Component {
 
@@ -14,7 +14,8 @@ class BigPictureControls extends React.Component {
       nPictures,
       closeImage,
       leftButton,
-      rightButton
+      rightButton,
+      deletePicture,
     } = this.props;
     return (
       <div className='control-buttons'>
@@ -29,6 +30,7 @@ class BigPictureControls extends React.Component {
             <SmallIcon src='/static/img/right-arrow.png' className='control-button' onClick={rightButton} />
           ) : null
         }
+        <SmallTextIcon text="delete" className='control-button' onClick={deletePicture} />
       </div>
     )
   }
@@ -40,6 +42,7 @@ BigPictureControls.propTypes = {
   // closeImage
   // leftButton
   // rightButton
+  // deletePicture
 };
 
 export default BigPictureControls

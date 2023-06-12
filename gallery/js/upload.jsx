@@ -61,7 +61,8 @@ class UploadPage extends React.Component {
             <form action="/api/v1/pictures/upload/" encType='multipart/form-data' method="post">
               <h2>Attach Pictures</h2>
               <br />
-              <input type="file" id="file" name="file" required multiple />
+              {/* for now 10 MB */}
+              <input type="file" id="file" name="file" required multiple max={10000000}/>
               <br />
               <br />
               <label htmlFor="albums">select an album to upload to:</label><br />

@@ -31,13 +31,20 @@ class Gallery extends React.Component {
     this.setState({ blownUpThumbnail: blownUpThumbnail + 1 });
   }
 
+  deletePictureAndUpdateState() {
+    const { deletePicture } = this.props;
+    const { blownUpThumbnail } = this.state;
+    deletePicture(blownUpThumbnail);
+    this.setState({blownUpThumbnail: -1});
+  }
+
   render() {
     const {
       albumName,
       pictures,
       sidebarShow,
       toggleSidebar,
-      selectedAlbum
+      selectedAlbum,
     } = this.props;
     const { blownUpThumbnail } = this.state;
 
@@ -52,8 +59,8 @@ class Gallery extends React.Component {
         {
           blownUpThumbnail !== -1 ? (
             <div>
-              <BigPictureControls blownUpThumbnail={blownUpThumbnail} nPictures={filteredPictures.length} closeImage={this.closeImage.bind(this)} leftButton={this.picturePaginationLeft.bind(this)} rightButton={this.picturePaginationRight.bind(this)} />
-              <BigPicture id={filteredPictures[blownUpThumbnail].fileid} name={filteredPictures[blownUpThumbnail].name} index={blownUpThumbnail} />
+              <BigPictureControls blownUpThumbnail={blownUpThumbnail} nPictures={filteredPictures.length} closeImage={this.closeImage.bind(this)} leftButton={this.picturePaginationLeft.bind(this)} rightButton={this.picturePaginationRight.bind(this)} deletePicture={this.deletePictureAndUpdateState.bind(this)} />
+              <BigPicture id={filteredPictures[blownUpThumbnail].fileid} name={filteredPictures[blownUpThumbnail].fileid} index={blownUpThumbnail} />
             </div>
           )
             :
@@ -61,7 +68,7 @@ class Gallery extends React.Component {
               <div className='gallery-grid'>
                 {
                   filteredPictures.map((picture, index) => {
-                    return <Picture id={picture.fileid} name={picture.name} index={index} thumbnailBlowUp={this.thumbnailBlowUp.bind(this)} />
+                    return <Picture id={picture.fileid} name={picture.fileid} index={index} thumbnailBlowUp={this.thumbnailBlowUp.bind(this)} />
                   })
                 }
               </div>
@@ -78,6 +85,7 @@ Gallery.propTypes = {
   pictures: PropTypes.instanceOf(Array),
   sidebarShow: PropTypes.bool.isRequired,
   // toggleSidebar
+  // deletePicture
 };
 
 export default Gallery

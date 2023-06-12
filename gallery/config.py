@@ -1,5 +1,7 @@
 """Development configuration."""
 import pathlib
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+MAX_CONTENT_LENGTH = 2 ** 30
 MY_HOST_ID = 1
 # Root of this application, useful if it doesn't occupy an entire domain
 APPLICATION_ROOT = '/'

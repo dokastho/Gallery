@@ -149,3 +149,19 @@ def get_picture(pic_id):
     }
     data = gallery.get_client().file_get(req_data, req_hdrs)
     return flask.Response(data)
+
+
+@gallery.app.route("/api/v1/picture/delete/<pic_id>/", methods=["POST"])
+def delete_picture(pic_id):
+    req_data = {
+        "table": gallery.app.config["DATABASE_FILENAME"],
+        "query": "DELETE FROM pictures WHERE fileid = ?",
+        "args": [pic_id],
+        "media_op": "delete",
+        "file_id": pic_id
+    }
+    req_hdrs = {
+        'content_type': 'application/json'
+    }
+    gallery.get_client().post(req_data, req_hdrs)
+    return flask.Response(status=200)

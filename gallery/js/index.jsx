@@ -17,6 +17,7 @@ class Index extends React.Component {
     }
     this.toggleSidebar = this.toggleSidebar.bind(this);
     this.selectAlbum = this.selectAlbum.bind(this);
+    this.deletePicture = this.deletePicture.bind(this);
   }
 
   componentDidMount() {
@@ -39,12 +40,28 @@ class Index extends React.Component {
   }
 
   selectAlbum(album) {
-    this.setState({ selectedAlbum: album});
+    this.setState({ selectedAlbum: album });
   }
 
   toggleSidebar() {
     const { sidebarShow } = this.state;
     this.setState({ sidebarShow: !sidebarShow });
+  }
+
+  deletePicture(index) {
+    // fetch image metadata
+    const { pictures } = this.state;
+    const picture = pictures[index];
+    fetch(`/api/v1/picture/delete/${picture.fileid}/`, { credentials: 'same-origin', method: 'POST' })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .catch((error) => console.log(error));
+    const updatedPictures = pictures.filter((item) => {
+      return item !== picture;
+    });
+    this.setState({ pictures: updatedPictures })
   }
 
   render() {
@@ -62,7 +79,7 @@ class Index extends React.Component {
           {
             sidebarShow ? <Sidebar albums={albums} logname={logname} toggleSidebar={this.toggleSidebar} selectAlbum={this.selectAlbum} /> : null
           }
-          <Gallery albumName={selectedAlbum} pictures={pictures} sidebarShow={sidebarShow} toggleSidebar={this.toggleSidebar} selectedAlbum={selectedAlbum} />
+          <Gallery albumName={selectedAlbum} pictures={pictures} sidebarShow={sidebarShow} toggleSidebar={this.toggleSidebar} deletePicture={this.deletePicture} selectedAlbum={selectedAlbum} />
         </div>
         {/* <Footer /> */}
       </div>
