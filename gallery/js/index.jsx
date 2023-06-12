@@ -11,9 +11,10 @@ class Index extends React.Component {
     this.state = {
       logname: "log in",
       pictures: [],
+      filteredPictures: [],
       albums: [],
       sidebarShow: true,
-      selectedAlbum: "All Photos"
+      selectedAlbumName: "All Photos"
     }
     this.toggleSidebar = this.toggleSidebar.bind(this);
     this.selectAlbum = this.selectAlbum.bind(this);
@@ -33,14 +34,18 @@ class Index extends React.Component {
         this.setState({
           logname: data.logname,
           pictures: data.pictures,
+          filteredPictures: data.pictures,
           albums: data.albums,
         });
       })
       .catch((error) => console.log(error));
   }
 
-  selectAlbum(album) {
-    this.setState({ selectedAlbum: album });
+  selectAlbum(args) {
+    const { id, name } = args;
+    const { pictures } = this.state;
+    const filteredPictures = pictures.filter(picture => (id === parseInt(picture.albumid)) || (name === 'All Photos'));
+    this.setState({ selectedAlbumName: name, filteredPictures: filteredPictures });
   }
 
   toggleSidebar() {
@@ -50,8 +55,8 @@ class Index extends React.Component {
 
   deletePicture(index) {
     // fetch image metadata
-    const { pictures } = this.state;
-    const picture = pictures[index];
+    const { pictures, filteredPictures } = this.state;
+    const picture = filteredPictures[index];
     fetch(`/api/v1/picture/delete/${picture.fileid}/`, { credentials: 'same-origin', method: 'POST' })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
@@ -61,16 +66,20 @@ class Index extends React.Component {
     const updatedPictures = pictures.filter((item) => {
       return item !== picture;
     });
-    this.setState({ pictures: updatedPictures })
+    const updatedFilteredPictures = filteredPictures.filter((item) => {
+      return item !== picture;
+    });
+    
+    this.setState({ pictures: updatedPictures, filteredPictures: updatedFilteredPictures });
   }
 
   render() {
     const {
       sidebarShow,
       logname,
-      pictures,
+      filteredPictures,
       albums,
-      selectedAlbum
+      selectedAlbumName,
     } = this.state;
     return (
       <div className='body-tray'>
@@ -79,7 +88,7 @@ class Index extends React.Component {
           {
             sidebarShow ? <Sidebar albums={albums} logname={logname} toggleSidebar={this.toggleSidebar} selectAlbum={this.selectAlbum} /> : null
           }
-          <Gallery albumName={selectedAlbum} pictures={pictures} sidebarShow={sidebarShow} toggleSidebar={this.toggleSidebar} deletePicture={this.deletePicture} selectedAlbum={selectedAlbum} />
+          <Gallery pictures={filteredPictures} sidebarShow={sidebarShow} toggleSidebar={this.toggleSidebar} deletePicture={this.deletePicture} selectedAlbumName={selectedAlbumName} />
         </div>
         {/* <Footer /> */}
       </div>

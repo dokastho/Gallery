@@ -26,9 +26,9 @@ class SmallTextIcon extends React.Component {
   }
 
   render() {
-    const { text, className, onClick } = this.props;
+    const { text, className, onClick, args } = this.props;
     return (
-      <h2 className={className} id='small-text' onClick={() => { onClick(text) }}>{text}</h2>
+      <h2 className={className} id='small-text' onClick={() => { onClick(args) }}>{text}</h2>
     )
   }
 }
@@ -36,6 +36,7 @@ class SmallTextIcon extends React.Component {
 SmallTextIcon.propTypes = {
   text: PropTypes.string.isRequired,
   className: PropTypes.string.isRequired,
+  args: PropTypes.instanceOf(Object),
   // onClick: action method on click
 };
 

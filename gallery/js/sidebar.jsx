@@ -21,7 +21,7 @@ class Sidebar extends React.Component {
           <h1>Albums</h1>
           {
             albums.map((album) => {
-              return (<SmallTextIcon text={album.name} className={'sidebar-album'} onClick={selectAlbum} />)
+              return (<SmallTextIcon text={album.name} className={'sidebar-album'} onClick={selectAlbum} args={{ id: album.id, name: album.name }} />)
             })
           }
         </div>
