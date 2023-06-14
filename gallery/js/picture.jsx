@@ -12,11 +12,11 @@ class Picture extends React.Component {
       name,
       index,
       thumbnailBlowUp,
-      key
+      keyNum
     } = this.props;
     return (
       <div>
-        <img src={`/api/v1/picture/${id}/`} key={key} alt={name} className='image' onClick={() => { thumbnailBlowUp(index) }} />
+        <img src={`/api/v1/picture/${id}/`} key={keyNum} alt={name} className='image' onClick={() => { thumbnailBlowUp(index) }} />
       </div>
     )
   }
@@ -26,7 +26,7 @@ Picture.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
-  key: PropTypes.number.isRequired
+  keyNum: PropTypes.number.isRequired
   // thumbnailBlowUp: select an image to focus on
 };
 

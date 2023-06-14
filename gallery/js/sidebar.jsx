@@ -17,7 +17,7 @@ class Sidebar extends React.Component {
     return (
       <div className='sidebar-tray'>
         <div className='sidebar-content'>
-          <SmallIcon src='/static/img/sidebar-collapse.png' className='sidebar-icon' onClick={toggleSidebar} />
+          <SmallIcon src='/static/img/sidebar-collapse.png' keyName={'sidebar'} className='sidebar-icon' onClick={toggleSidebar} />
           <h1>Albums</h1>
           {
             albums.map((album) => {

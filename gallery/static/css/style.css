@@ -150,6 +150,12 @@ h2 {
 
 .control-buttons {
     text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+.control-button-delete {
+    margin-left: 1rem;
 }
 
 .account-view {

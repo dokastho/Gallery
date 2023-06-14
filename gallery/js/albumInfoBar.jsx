@@ -19,7 +19,7 @@ class AlbumInfoBar extends React.Component {
     return (
       <div className='album-info-bar'>
         {
-          sidebarShow ? (null) : (<SmallIcon src='/static/img/sidebar-collapse.png' className='sidebar-icon' onClick={toggleSidebar} />)
+          sidebarShow ? (null) : (<SmallIcon src='/static/img/sidebar-collapse.png' keyName={'sidebar'} className='sidebar-icon' onClick={toggleSidebar} />)
         }
         <h1 style={{ paddingLeft: '1rem' }}>{albumName}</h1>
         {

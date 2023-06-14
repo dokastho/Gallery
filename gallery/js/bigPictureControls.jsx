@@ -19,18 +19,18 @@ class BigPictureControls extends React.Component {
     } = this.props;
     return (
       <div className='control-buttons'>
-        <SmallIcon src='/static/img/close-tab.png' className='control-button' onClick={closeImage} />
+        <SmallIcon src='/static/img/close-tab.png' keyName={'close'} className='control-button' onClick={closeImage} />
         {
           blownUpThumbnail !== 0 ? (
-            <SmallIcon src='/static/img/left-arrow.png' className='control-button' onClick={leftButton} />
+            <SmallIcon src='/static/img/left-arrow.png' keyName={'left'} className='control-button' onClick={leftButton} />
           ) : null
         }
         {
           blownUpThumbnail !== nPictures - 1 ? (
-            <SmallIcon src='/static/img/right-arrow.png' className='control-button' onClick={rightButton} />
+            <SmallIcon src='/static/img/right-arrow.png' keyName={'right'} className='control-button' onClick={rightButton} />
           ) : null
         }
-        <SmallTextIcon text="delete" className='control-button' onClick={deletePicture} />
+        <SmallTextIcon text="delete" className='control-button-delete' onClick={deletePicture} />
       </div>
     )
   }
