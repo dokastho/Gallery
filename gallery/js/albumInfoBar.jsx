@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SmallIcon, SmallTextIcon } from './smallIcon';
+import { SmallIcon, SmallTextIcon, SmallConfirmatoryTextIcon } from './smallIcon';
 import DropDownSearch from './dropDownSearch';
 
 class AlbumInfoBar extends React.Component {
@@ -39,7 +39,7 @@ class AlbumInfoBar extends React.Component {
         <h1 style={{ paddingLeft: '1rem' }}>{albumName}</h1>
         <div>
           {
-            logname === 'dokastho' && albumName !== 'All Photos' ? <SmallTextIcon text={'delete album'} className={'infobar-text'} onClick={deleteAlbum} args={{ id: albumid }} /> : null
+            logname === 'dokastho' && albumName !== 'All Photos' ? <SmallConfirmatoryTextIcon text={'delete album'} className={'infobar-text'} onClick={deleteAlbum} args={{ id: albumid }} /> : null
           }
           {
             shareButtonSelected ? <DropDownSearch items={usernamesNotMe} name={'drop-down'} target={`/api/v1/album/share/${albumid}/`} toggleRender={this.toggleShareButton} /> : (

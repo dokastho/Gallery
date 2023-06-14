@@ -132,6 +132,21 @@ body {
     background-color: gray;
 }
 
+#small-text-selected {
+    padding: 0.25rem;
+}
+
+#small-text-selected:hover {
+    
+    background-color: #d1343f;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+#small-text-selected:active {
+    background-color: #91242c;
+}
+
 .album-info-bar {
     display: flex;
     align-items: center;
@@ -196,11 +211,18 @@ a:hover {
     padding: 0.25rem;
 }
 
-.dropdown-search-item {
-    display: contents;
+.dropdown-search-item, .dropdown-selected-item {
+    display: block;
+    padding: 0.25rem;
 }
 
-.dropdown-search:hover {
+.dropdown-selected-item:hover {
+    background: #d1343f;
+    transition: all .2s;
+    cursor: pointer;
+}
+
+.dropdown-search-item:hover {
     background: aliceblue;
     transition: all .2s;
     cursor: pointer;

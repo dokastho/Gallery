@@ -25,11 +25,12 @@ class DropDownSearch extends React.Component {
   }
 
   deselectItem(item) {
-    const { selectedItems, filteredItems } = this.state;
+    const { searchTerm, selectedItems, filteredItems } = this.state;
     const filteredItemsWithItem = filteredItems.concat(item);
     const selectedItemsWithoutItem = selectedItems.filter(selectedItem => item !== selectedItem);
 
     this.setState({ selectedItems: selectedItemsWithoutItem, filteredItems: filteredItemsWithItem });
+    this.updateSearch(searchTerm);
   }
 
   updateSearch(searchTerm) {
@@ -80,7 +81,7 @@ class DropDownSearch extends React.Component {
         <ul className='dropdown-search'>
           {
             selectedItems.map((item) => {
-              return (<li className='dropdown-search-item' onClick={() => { this.deselectItem(item) }}>{item}</li>);
+              return (<li className='dropdown-selected-item' onClick={() => { this.deselectItem(item) }}>{item}</li>);
             })
           }
         </ul>

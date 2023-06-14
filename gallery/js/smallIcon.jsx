@@ -41,4 +41,34 @@ SmallTextIcon.propTypes = {
   // onClick: action method on click
 };
 
-export { SmallIcon, SmallTextIcon }
+class SmallConfirmatoryTextIcon extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selected: false
+    }
+    this.toggleSelect = this.toggleSelect.bind(this);
+  }
+
+  toggleSelect() {
+    const { selected } = this.state;
+    this.setState({ selected: !selected });
+  }
+
+  render() {
+    const { selected } = this.state;
+    const { text, className, onClick, args } = this.props;
+    return (
+      selected ? <h2 className={className} id='small-text-selected' onClick={() => { onClick(args) }}>{text}</h2> : <h2 className={className} id='small-text' onClick={() => { this.toggleSelect() }}>{text}</h2>
+    )
+  }
+}
+
+SmallConfirmatoryTextIcon.propTypes = {
+  text: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired,
+  args: PropTypes.instanceOf(Object),
+  // onClick: action method on click
+};
+
+export { SmallIcon, SmallTextIcon, SmallConfirmatoryTextIcon }
