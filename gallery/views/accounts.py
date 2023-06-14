@@ -2,7 +2,7 @@
 import uuid
 import hashlib
 import os
-import arrow
+import pathlib
 from flask import abort, redirect, render_template, request, session
 import gallery
 
@@ -30,20 +30,22 @@ def accounts():
                 abort(500)      # server didn't abort
             session['logname'] = uname
 
-        # do not allow creating or deleting without being logged in
-        elif 'logname' not in session:
-            abort(403)
 
         # create an account
         elif operation == "create":
             info = {
                 "username": request.form.get("username"),
                 "email": request.form.get("email"),
-                "password": request.form.get("password")
+                "password": request.form.get("password"),
+                "fullname": request.form.get("fullname"),
+                "file": request.files.get("file"),
             }
             if not do_create(info):
                 abort(500)      # server didn't abort correctly
 
+        # do not allow deleting without being logged in
+        elif 'logname' not in session:
+            abort(403)
 
         elif operation == "delete":
             do_delete()
@@ -82,10 +84,6 @@ def do_create(info):
         if i == "":
             abort(400)
 
-    utc = arrow.utcnow()
-    local = utc.to('US/Pacific')
-    timestamp = local.format()
-
     pw_str = create_hashed_password(info['password'])
     
     req_data = {
@@ -101,19 +99,45 @@ def do_create(info):
 
     if len(user) != 0:
         abort(409)
-        
+        pass
+    
+    # upload profile picture
+    picture = info['file']
+    os.chdir(gallery.app.config["SITE_ROOT"])
+    tmp_dir = f'tmp-{gallery.app.config["MY_HOST_ID"]}'
+    tmp_path = pathlib.Path(gallery.app.config["SITE_ROOT"]) / tmp_dir
+    if tmp_dir not in os.listdir():
+        os.mkdir(tmp_path)
+        pass
+    
+    file_id = gallery.get_uuid(picture.filename)
     
     req_data = {
         "table": gallery.app.config["DATABASE_FILENAME"],
-        "query": "INSERT INTO users (username, email, password, created) VALUES (?, ?, ?, ?)",
-        "args": [info['username'], info['email'], pw_str, timestamp],
+        "query": "INSERT INTO users (username, fullname, email, filename, password) VALUES (?, ?, ?, ?, ?)",
+        "args": [info['username'], info['fullname'], info['email'], file_id, pw_str],
     }
     req_hdrs = {
         'content_type': 'application/json'
     }
         
     gallery.get_client().post(req_data, req_hdrs)
+    
+    req_data = {
+        "table": gallery.app.config["DATABASE_FILENAME"],
+        "query": "INSERT INTO pictures(owner, albumid, fileid) VALUES (?, ?, ?)",
+        "args": [info['username'], 1, file_id],
+        "media_op": "upload",
+        "file_id": file_id
+    }
+    
+    picture.save(tmp_path / file_id)
 
+    fileobj = open(tmp_path / file_id, "rb")
+    gallery.get_client().file_post(req_data, fileobj)
+    os.remove(tmp_path / file_id)
+
+    session['logname'] = info['username']
     return True
 
 
@@ -124,6 +148,18 @@ def do_delete():
         abort(403)
 
     uname = session['logname']
+    
+    # get profile picture ID
+    req_data = {
+        "table": gallery.app.config["DATABASE_FILENAME"],
+        "query": "SELECT filename FROM users WHERE username = ?",
+        "args": [uname],
+    }
+    req_hdrs = {
+        'content_type': 'application/json'
+    }
+        
+    file_id = gallery.get_client().get(req_data, req_hdrs)[0]['filename']
 
     # delete users entry and all related ones
     req_data = {
@@ -139,6 +175,19 @@ def do_delete():
 
     # clear the session
     session.clear()
+    
+    # delete profile picture
+    req_data = {
+        "table": gallery.app.config["DATABASE_FILENAME"],
+        "query": "DELETE FROM pictures WHERE fileid = ?",
+        "args": [file_id],
+        "media_op": "delete",
+        "file_id": file_id
+    }
+    req_hdrs = {
+        'content_type': 'application/json'
+    }
+    gallery.get_client().post(req_data, req_hdrs)
 
 
 def do_update_password(info):

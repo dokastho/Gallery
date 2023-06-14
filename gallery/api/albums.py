@@ -43,3 +43,21 @@ def delete_album(album_id):
     }
     gallery.get_client().post(req_data, req_hdrs)
     return flask.Response(status=200)
+
+
+@gallery.app.route("/api/v1/album/share/<album_id>/", methods=["POST"])
+def share_album(album_id):
+    recipients = flask.request.form.get("selection")
+    for user in recipients.split(','):
+        req_data = {
+            "table": gallery.app.config["DATABASE_FILENAME"],
+            "query": "INSERT INTO sharing (user, albumid) VALUES (?, ?)",
+            "args": [user, album_id],
+        }
+        req_hdrs = {
+            'content_type': 'application/json'
+        }
+
+        gallery.get_client().post(req_data, req_hdrs)
+        pass
+    return flask.Response(status=200)

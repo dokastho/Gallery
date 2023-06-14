@@ -14,6 +14,7 @@ render(
         <input type="password" name="password" id="password" /><br />
         <input type="submit" value="log in" /><br />
       </form>
+      don't have an account? <a href='/accounts/create/'>create one.</a>
     </div>
   </div></>,
   document.getElementById("reactEntry"),

@@ -14,6 +14,7 @@ def get_picture_info():
         data["logname"] = "log in"
         data["albums"] = []
         data["pictures"] = []
+        data["accounts"] = []
         return flask.jsonify(data)
 
     req_data = {
@@ -42,6 +43,18 @@ def get_picture_info():
     # get albums too
     req_data["query"] = f"SELECT * FROM albums WHERE id in ({('?, ' * len(album_ids)).rstrip(', ')})"
     data["albums"] = gallery.get_client().get(req_data, req_hdrs)
+    
+    req_data = {
+        "table": gallery.app.config["DATABASE_FILENAME"],
+        "query": "SELECT username FROM users",
+        "args": [],
+    }
+    req_hdrs = {
+        'content_type': 'application/json'
+    }
+    
+    usernames = gallery.get_client().get(req_data, req_hdrs)
+    data["accounts"] = [x["username"] for x in usernames]
     return flask.jsonify(data)
 
 
@@ -110,8 +123,9 @@ def upload_picture():
     
     # create temp output folder if it doesn't already exists
     os.chdir(gallery.app.config["SITE_ROOT"])
-    tmp_path = pathlib.Path(gallery.app.config["SITE_ROOT"]) / 'tmp'
-    if 'tmp' not in os.listdir():
+    tmp_dir = f'tmp-{gallery.app.config["MY_HOST_ID"]}'
+    tmp_path = pathlib.Path(gallery.app.config["SITE_ROOT"]) / tmp_dir
+    if tmp_dir not in os.listdir():
         os.mkdir(tmp_path)
         pass
 

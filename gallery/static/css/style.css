@@ -190,3 +190,24 @@ a:hover {
 .profile-pic {
     width: -webkit-fill-available;
 }
+
+.dropdown-search {
+    background: white;
+    padding: 0.25rem;
+}
+
+.dropdown-search-item {
+    display: contents;
+}
+
+.dropdown-search:hover {
+    background: aliceblue;
+    transition: all .2s;
+    cursor: pointer;
+}
+
+.dropdown-search-field {
+    border: 2px solid #01245B;
+    border-radius: 0.5rem;
+    padding: 2rem;
+}

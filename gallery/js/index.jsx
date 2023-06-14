@@ -16,6 +16,7 @@ class Index extends React.Component {
       sidebarShow: true,
       selectedAlbumName: "All Photos",
       selectedAlbumId: -1,
+      usernames: [],
     }
     this.toggleSidebar = this.toggleSidebar.bind(this);
     this.selectAlbum = this.selectAlbum.bind(this);
@@ -38,6 +39,7 @@ class Index extends React.Component {
           pictures: data.pictures,
           filteredPictures: data.pictures,
           albums: data.albums,
+          usernames: data.accounts,
         });
       })
       .catch((error) => console.log(error));
@@ -113,6 +115,7 @@ class Index extends React.Component {
       albums,
       selectedAlbumName,
       selectedAlbumId,
+      usernames,
     } = this.state;
     return (
       <div className='body-tray'>
@@ -121,7 +124,7 @@ class Index extends React.Component {
           {
             sidebarShow ? <Sidebar albums={albums} logname={logname} toggleSidebar={this.toggleSidebar} selectAlbum={this.selectAlbum} /> : null
           }
-          <Gallery pictures={filteredPictures} logname={logname} sidebarShow={sidebarShow} toggleSidebar={this.toggleSidebar} deletePicture={this.deletePicture} deleteAlbum={this.deleteAlbum} selectedAlbumName={selectedAlbumName} selectedAlbumId={selectedAlbumId} />
+          <Gallery pictures={filteredPictures} usernames={usernames} logname={logname} sidebarShow={sidebarShow} toggleSidebar={this.toggleSidebar} deletePicture={this.deletePicture} deleteAlbum={this.deleteAlbum} selectedAlbumName={selectedAlbumName} selectedAlbumId={selectedAlbumId} />
         </div>
         {/* <Footer /> */}
       </div>
