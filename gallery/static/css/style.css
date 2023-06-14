@@ -30,6 +30,10 @@ body {
     padding: 1rem;
 }
 
+.sidebar-icon {
+    /* padding-right: 93.44px; */
+}
+
 .image-gallery {
     padding: 20px;
     display: block;
@@ -132,6 +136,7 @@ body {
     display: flex;
     align-items: center;
     padding-bottom: 1rem;
+    justify-content: space-between;
 }
 
 h1 {
@@ -174,4 +179,8 @@ a:hover {
 .upload-link {
     padding: 1.25rem;
     bottom: 0;
+}
+
+.profile-pic {
+    width: -webkit-fill-available;
 }

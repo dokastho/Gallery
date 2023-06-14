@@ -26,7 +26,7 @@ def get_picture_info():
     }
 
     albums = gallery.get_client().get(req_data, req_hdrs)
-    album_ids = [album['id'] for album in albums]
+    album_ids = [album['albumid'] for album in albums]
 
     req_data = {
         "table": gallery.app.config["DATABASE_FILENAME"],

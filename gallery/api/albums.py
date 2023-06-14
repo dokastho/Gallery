@@ -1,6 +1,7 @@
 import gallery
 import flask
 
+
 @gallery.app.route("/api/v1/album/delete/<album_id>/", methods=["POST"])
 def delete_album(album_id):
     # delete all pictures that belong to this album
@@ -14,9 +15,9 @@ def delete_album(album_id):
     req_hdrs = {
         'content_type': 'application/json'
     }
-    
+
     pictures = gallery.get_client().get(req_data, req_hdrs)
-    
+
     for picture in pictures:
         fileid = picture['fileid']
         req_data = {
@@ -29,9 +30,9 @@ def delete_album(album_id):
         req_hdrs = {
             'content_type': 'application/json'
         }
-                
+
         gallery.get_client().post(req_data, req_hdrs)
-    
+
     req_data = {
         "table": gallery.app.config["DATABASE_FILENAME"],
         "query": "DELETE FROM albums WHERE id = ?",

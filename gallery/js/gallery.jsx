@@ -75,7 +75,7 @@ class Gallery extends React.Component {
               <div className='gallery-grid'>
                 {
                   pictures.map((picture, index) => {
-                    return <Picture id={picture.fileid} name={picture.fileid} index={index} thumbnailBlowUp={this.thumbnailBlowUp.bind(this)} />
+                    return <Picture id={picture.fileid} key={picture.id} name={picture.fileid} index={index} thumbnailBlowUp={this.thumbnailBlowUp.bind(this)} />
                   })
                 }
               </div>

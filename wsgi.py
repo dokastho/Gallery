@@ -11,7 +11,7 @@ if __name__ == "__main__":
         print("need to supply host_id argument.")
         exit()
     host_id = int(sys.argv[1])
+    # RUNS ON SECOND PAXOS SERVER (2)
     app.config["MY_HOST_ID"] = host_id
-    app.config["UPLOAD_FOLDER"] = app.config["SITE_ROOT"]/f'var-{host_id}'
-    app.run(port=8054 + host_id)
+    app.run(port=5055 + host_id)
     pass

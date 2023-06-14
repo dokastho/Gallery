@@ -23,7 +23,7 @@ class AlbumInfoBar extends React.Component {
         }
         <h1 style={{ paddingLeft: '1rem' }}>{albumName}</h1>
         {
-          logname === 'dokastho' && albumName !== 'All Photos' ? <SmallTextIcon text={'delete album'} className={'sidebar-icon'} onClick={deleteAlbum} args={{ id: albumid }} /> : null
+          logname === 'dokastho' && albumName !== 'All Photos' ? <SmallTextIcon text={'delete album'} className={'infobar-text'} onClick={deleteAlbum} args={{ id: albumid }} /> : <SmallTextIcon text={''} className={'infobar-text'} />
         }
       </div>
     )
