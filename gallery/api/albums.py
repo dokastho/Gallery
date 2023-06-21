@@ -1,5 +1,6 @@
 import gallery
 import flask
+import json
 
 
 @gallery.app.route("/api/v1/album/delete/<album_id>/", methods=["POST"])
@@ -47,8 +48,9 @@ def delete_album(album_id):
 
 @gallery.app.route("/api/v1/album/share/<album_id>/", methods=["POST"])
 def share_album(album_id):
-    recipients = flask.request.form.get("selection")
-    for user in recipients.split(','):
+    json_data = json.loads(flask.request.data.decode('ascii'))
+    recipients = json_data["selectedItems"]
+    for user in recipients:
         req_data = {
             "table": gallery.app.config["DATABASE_FILENAME"],
             "query": "INSERT INTO sharing (user, albumid) VALUES (?, ?)",

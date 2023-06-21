@@ -6,6 +6,7 @@ import pathlib
 
 @gallery.app.route("/api/v1/pictures/", methods=["POST"])
 def get_picture_info():
+    """Basically the main fetch endpoint."""
     logname = flask.session.get('logname')
     data = {
         "logname": logname,
@@ -17,6 +18,7 @@ def get_picture_info():
         data["accounts"] = []
         return flask.jsonify(data)
 
+    # get all albums that each user has access to
     req_data = {
         "table": gallery.app.config["DATABASE_FILENAME"],
         "query": "SELECT * FROM sharing WHERE user = ?",
@@ -26,7 +28,7 @@ def get_picture_info():
         'content_type': 'application/json'
     }
 
-    albums = gallery.get_client().get(req_data, req_hdrs)
+    albums = gallery.get_client(1).get(req_data, req_hdrs)
     album_ids = [album['albumid'] for album in albums]
 
     req_data = {
@@ -39,11 +41,12 @@ def get_picture_info():
     }
 
     # return logname, pictures & albums
-    data["pictures"] = gallery.get_client().get(req_data, req_hdrs)
+    data["pictures"] = gallery.get_client(2).get(req_data, req_hdrs)
     # get albums too
     req_data["query"] = f"SELECT * FROM albums WHERE id in ({('?, ' * len(album_ids)).rstrip(', ')})"
-    data["albums"] = gallery.get_client().get(req_data, req_hdrs)
+    data["albums"] = gallery.get_client(3).get(req_data, req_hdrs)
     
+    # get list of usernames for sharing
     req_data = {
         "table": gallery.app.config["DATABASE_FILENAME"],
         "query": "SELECT username FROM users",
@@ -54,6 +57,7 @@ def get_picture_info():
     }
     
     usernames = gallery.get_client().get(req_data, req_hdrs)
+
     data["accounts"] = [x["username"] for x in usernames]
     return flask.jsonify(data)
 

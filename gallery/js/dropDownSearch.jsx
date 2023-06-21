@@ -14,6 +14,28 @@ class DropDownSearch extends React.Component {
     this.cancelSearch = this.cancelSearch.bind(this);
     this.selectItem = this.selectItem.bind(this);
     this.deselectItem = this.deselectItem.bind(this);
+
+    this.submit = this.submit.bind(this);
+  }
+
+  submit() {
+    const { selectedItems } = this.state;
+    const { target } = this.props;
+
+    fetch(target,
+      {
+        credentials: 'same-origin',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ selectedItems })
+      })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .catch((error) => console.log(error));
+
+    this.cancelSearch();
   }
 
   selectItem(item) {
@@ -64,12 +86,10 @@ class DropDownSearch extends React.Component {
     return (
       <div className='dropdown-search-field'>
         <h2>Share with:</h2>
-        <form action={target} encType='multipart/form-data' method="post">
-          <input type='text' className={name} value={searchTerm} onChange={(e) => { this.updateSearch(e.target.value) }} />
-          <input type='hidden' name='selection' value={selectedItems} />
-          <input type="submit" value={'share'} onSubmit={(e) => { e.preventDefault() }} />
-          <input type='button' value={'cancel'} onClick={() => { this.cancelSearch(); toggleRender() }} />
-        </form>
+        <input type='text' className={name} value={searchTerm} onChange={(e) => { this.updateSearch(e.target.value) }} />
+        <input type='hidden' name='selection' value={selectedItems} />
+        <input type="submit" value={'share'} onClick={() => { this.submit() }} />
+        <input type='button' value={'cancel'} onClick={() => { this.cancelSearch(); toggleRender() }} />
         <ul className='dropdown-search'>
           {
             filteredItems.map((item) => {
